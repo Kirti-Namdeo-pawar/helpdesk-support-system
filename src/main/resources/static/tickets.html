@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Tickets | Support System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="create-ticket.html">🎟️ Support System</a>
+        <span id="userDisplay" class="text-light"></span>
+    </div>
+</nav>
+<div class="container mt-5">
+    <button class="btn btn-primary" onclick="window.location.href='view-tickets.html'">
+        View by User ID
+    </button>
+    <h2 class="mb-4 text-center">All Support Tickets</h2>
+    <table id="ticketsTable" class="table table-hover text-center">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+</div>
+
+<script>
+    async function loadTickets() {
+      try {
+      const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:8080/api/tickets", {
+  headers: { "Authorization": `Bearer ${token}` }
+});
+        const tickets = await res.json();
+
+        const tbody = document.querySelector("#ticketsTable tbody");
+        tbody.innerHTML = "";
+
+        tickets.forEach(t => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${t.id}</td>
+              <td>${t.title}</td>
+              <td>
+                <span class="badge ${t.status === 'CLOSED' ? 'bg-danger' : t.status === 'IN_PROGRESS' ? 'bg-warning text-dark' : 'bg-success'}">
+                  ${t.status}
+                </span>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-warning" onclick="updateStatus(${t.id}, '${t.status}')">
+                  Update Status
+                </button>
+              </td>
+            </tr>`;
+        });
+      } catch (err) {
+        console.error("Error loading tickets:", err);
+      }
+    }
+
+    async function updateStatus(id, currentStatus) {
+      const nextStatus = currentStatus === "OPEN" ? "IN_PROGRESS" :
+                         currentStatus === "IN_PROGRESS" ? "CLOSED" : "OPEN";
+
+      try {
+        const res = await fetch(`http://localhost:8080/api/tickets/${id}/status?status=${nextStatus}`, {
+  method: "PUT",
+  headers: { "Authorization": `Bearer ${token}` }
+});
+
+        if (res.ok) {
+          console.log(`Ticket #${id} updated to ${nextStatus}`);
+          loadTickets(); // Refresh table
+        } else {
+          console.error("Failed to update ticket status");
+        }
+      } catch (err) {
+        console.error("Error updating status:", err);
+      }
+    }
+
+    loadTickets();
+</script>
+<script>
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!user) {
+      window.location.href = "index.html"; // force login
+    } else {
+      document.getElementById("userDisplay").textContent = `Welcome, ${user.username}`;
+    }
+</script>
+</body>
+</html>
