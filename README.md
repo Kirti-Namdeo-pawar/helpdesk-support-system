@@ -35,6 +35,9 @@ https://github.com/user-attachments/assets/b83787ab-5c32-4de2-a054-42ec4c66f425
 
 ## 🧩 System Architecture
 
+<img width="1623" height="345" alt="Screenshot 2026-03-09 185015" src="https://github.com/user-attachments/assets/7fea207c-6e65-466d-b9e0-3ca99072097c" />
+
+
 [ User Interface (HTML, CSS, JS) ]
 ↓
 [ REST API (Spring Boot Controllers) ]
