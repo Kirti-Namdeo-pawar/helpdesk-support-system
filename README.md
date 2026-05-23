@@ -111,9 +111,8 @@ OPEN → IN_PROGRESS → CLOSED → REOPENED → OPEN
 
 ---
 
-![System Architecture Diagram](<img width="1408" height="768" alt="Gemini_Generated_Image_ql7k2jql7k2jql7k" src="https://github.com/user-attachments/assets/cffda289-f9b3-4d1a-9772-d736a76da4c1" />
-)
----
+![System Architecture Diagram]
+<img width="1408" height="768" alt="Gemini_Generated_Image_ql7k2jql7k2jql7k" src="https://github.com/user-attachments/assets/ff216b09-3193-4eaa-8075-61f0c94ca438" />
 
 ## 🗂️ Entity Relationship Design
 
