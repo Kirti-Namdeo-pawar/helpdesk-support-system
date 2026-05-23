@@ -1,84 +1,363 @@
-# helpdesk-support-system
-# 💬 Customer Support Ticket System
+# ResolveX — Employee Helpdesk & Ticket Lifecycle Management System
 
-A **full-stack Spring Boot web application** that enables efficient management of customer queries and support tickets.  
-It allows users to **register, log in, create tickets, and view their issue history**, making the customer service process smooth and transparent.
+A **workflow-oriented** full-stack helpdesk system built with Spring Boot, enabling employees to raise support tickets, track resolutions, and manage ticket lifecycles efficiently.  
+ResolveX **simulates real-world internal helpdesk operations**, streamlining issue reporting and support workflows for modern organizations.
 
 ---
 
+## 🚀 Project Highlights
+
+- **Structured Ticket Lifecycle Workflow Management**
+- **Layered Spring Boot Architecture**
+- **Employee Ticket Tracking Dashboard**
+- **Spring Security Integration & BCrypt Password Encryption**
+- **RESTful API Design**
+- **MySQL + Hibernate ORM Integration**
+- **Robust Filtering, Sorting & Search Support**
+- **Dockerized Deployment Workflow & AWS EC2 Awareness**
+- **JPA Relationship Mapping**
+- **Unit Testing with JUnit & Mockito**
+- **Clean Frontend using HTML, CSS & JavaScript**
+
+---
 https://github.com/user-attachments/assets/b83787ab-5c32-4de2-a054-42ec4c66f425
 
-## 🚀 Features
+## 📌 Project Overview
 
-✅ **User Registration & Login** — Secure registration with department and email authentication.  
-✅ **Password Encryption** — Uses BCrypt for safe password storage.  
-✅ **Ticket Management** — Create, view, and track the status of support tickets.  
-✅ **Role-based Access (Future Enhancement)** — Enables admin and support staff to manage tickets.  
-✅ **Database Integration** — Stores users and tickets using MySQL and JPA/Hibernate ORM.  
-✅ **Clean Frontend UI** — Simple and responsive design with HTML, CSS, and JS.  
-✅ **RESTful APIs** — Clean API structure following Spring Boot best practices.  
+ResolveX empowers employees to:
+- Raise and manage support tickets.
+- Track ticket progress through distinct workflow stages.
+- Reopen unresolved issues and view history.
 
----
-
-## 🧠 Tech Stack
-
-| Layer | Technologies Used |
-|-------|--------------------|
-| **Frontend** | HTML5, CSS3, JavaScript |
-| **Backend** | Spring Boot 3, Spring Web, Spring Security, JPA/Hibernate |
-| **Database** | MySQL |
-| **Build Tool** | Maven |
-| **Version Control** | Git & GitHub |
-| **Testing** | Postman, JUnit (optional) |
+Designed to showcase:
+- Workflow-driven backend design.
+- Layered architecture best practices.
+- Relational database mapping.
+- Secure authentication and filtering operations.
+- Real-world, deployment-ready engineering.
 
 ---
 
-## 🧩 System Architecture
+## 🧠 Problem Statement
 
-<img width="1623" height="345" alt="Screenshot 2026-03-09 185015" src="https://github.com/user-attachments/assets/7fea207c-6e65-466d-b9e0-3ca99072097c" />
+Organizations often face:
+- Unmanaged issue reporting.
+- No centralized ticket tracking.
+- Inefficient resolution workflows.
 
+**ResolveX** solves these by providing:
+- Centralized helpdesk management.
+- Structured lifecycle handling.
+- Searchable ticket history.
+- Workflow-based ticket processing.
 
-[ User Interface (HTML, CSS, JS) ]
+---
+
+## 🔄 Ticket Lifecycle Workflow
+
+Ticket states modeled for real-world operations:
+
+```
+OPEN → IN_PROGRESS → CLOSED → REOPENED → OPEN
+```
+
+| Status       | Description                               |
+|--------------|-------------------------------------------|
+| **OPEN**         | New ticket created by employee             |
+| **IN_PROGRESS**  | Helpdesk team actively processing the issue|
+| **CLOSED**       | Issue resolved and closed                  |
+| **REOPENED**     | Employee reopens unresolved issue          |
+
+**Automatic Workflow:**  
+- Employee raises → `OPEN`  
+- Helpdesk takes up → `IN_PROGRESS`  
+- Issue resolved → `CLOSED`  
+- Can be reopened by employee → `REOPENED` → `OPEN`
+
+---
+
+## 🏗️ System Architecture
+
+**Layered Monolithic Architecture** for maintainability and modularity.
+- Clean separation of concerns
+- Easy scalability and testing
+
+---
+
+## 🧱 Architectural Layers
+
+### 1️⃣ Frontend Layer
+- User dashboard, ticket form, tracking UI
+- **Tech:** HTML5, CSS3, JavaScript
+
+### 2️⃣ Controller Layer
+- HTTP request handling, API routing, ticket workflow endpoints
+- **Controllers:** `AuthController`, `TicketController`
+
+### 3️⃣ Service Layer
+- Business logic, ticket lifecycle, filtering
+- **Services:** `UserService`, `TicketService`
+
+### 4️⃣ Security Layer
+- Authentication, route protection, BCEypt password handling, endpoint authorization
+- **Stack:** Spring Security, BCrypt encoder, filter chain
+
+### 5️⃣ Repository Layer
+- DB interactions, entity persistence
+- **Repos:** `UserRepository`, `TicketRepository`
+
+### 6️⃣ Database Layer
+- Persistent storage, MySQL backend, JPA/Hibernate ORM
+
+---
+
+![System Architecture Diagram](https://github.com/user-attachments/assets/b83787ab-5c32-4de2-a054-42ec4c66f425)
+
+---
+
+## 🗂️ Entity Relationship Design
+
+**User-to-Ticket:**  
+One User → Many Tickets (`@OneToMany`, `@ManyToOne`)
+
+- **User Entity:**  
+  Fields: `employeeId`, `username`, `email`, `department`, `password`
+- **Ticket Entity:**  
+  Fields: `ticketId`, `title`, `description`, `status`, `createdAt`, `user reference`
+
+---
+
+## 🔐 Authentication & Security
+
+- **Spring Security** for authentication & endpoint protection.
+- **BCrypt** for secure password storage.
+- **Route-Based Authorization, Security Filter Chain**.
+
+_Passwords are never stored in plaintext!_
+
+**Authentication Flow:**
+```
+User Login
+→ Security Filter Chain
+→ BCrypt Validation
+→ Access Granted
+→ API Processing
+```
+
+---
+
+## 📡 REST API Features
+
+Standard RESTful endpoints for user and ticket management.
+
+#### Ticket Operations
+- Create, update, retrieve, filter, and reopen tickets
+
+#### Filtering/Search
+- Status-based, user-based, pagination, sorting, search
+
+---
+
+## ⚙️ Notable Backend Logic
+
+- Workflow-driven ticket lifecycle/state transitions
+- Service-layer ticket handling
+- Secure user ownership and mapping
+- Status toggle and reopen logic
+- Filter, sort, paginate for tickets
+
+---
+
+## 📊 Backend Workflow (at a glance)
+
+```
+Employee Raises Ticket
 ↓
-[ REST API (Spring Boot Controllers) ]
+Ticket Stored in DB
 ↓
-[ Service Layer (Business Logic) ]
+Helpdesk Processes (IN_PROGRESS)
 ↓
-[ JPA Repository (Data Access) ]
+Ticket Closed
 ↓
-[ MySQL Database ]
+Employee May Reopen
+```
 
+---
 
-## ⚙️ How to Run Locally
+## 🧪 Testing & Quality
 
-1️⃣ **Clone the repository**
-```bash
-git clone https://github.com/Kirti-Namdeo-pawar/helpdesk-support-system.git
-cd helpdesk-support-system
+- **Unit Testing:** JUnit
+- **Mock Dependencies:** Mockito
+- **Covered Areas:** Service layer, repository interaction, workflow, filtering, user logic
 
-2️⃣ Configure the database
+| Service      | Test Coverage           |
+|--------------|------------------------|
+| UserService  | ~5 core test cases      |
 
-Open src/main/resources/application.properties
+---
 
-Update your MySQL username and password
+## ⚙️ Tech Stack
 
+| Layer       | Technologies                |
+|-------------|----------------------------|
+| Frontend    | HTML5, CSS3, JavaScript    |
+| Backend     | Spring Boot 3, Spring Web  |
+| Security    | Spring Security, BCrypt    |
+| ORM         | Hibernate / JPA            |
+| Database    | MySQL                      |
+| Build Tool  | Maven                      |
+| Deployment  | Docker                     |
+| Cloud       | AWS EC2 Awareness          |
+| VCS         | Git & GitHub               |
 
+---
 
+## 🐳 Docker & Deployment Workflow
 
+- **Dockerfile** for easy image build
+- Ready for **AWS EC2** and local deployment
 
+```text
+Developer → GitHub → Dockerfile → Docker Image → AWS EC2 → Container → Running App
+```
 
-code:
-spring.datasource.url=jdbc:mysql://localhost:3306/support_db
-spring.datasource.username=root
-spring.datasource.password=yourpassword
-spring.jpa.hibernate.ddl-auto=update
+---
 
+## ☁️ Deployment Awareness
 
-3️⃣ Run the application
-4️⃣ Open your browser and navigate to
-👉 http://localhost:8080
+- Dockerized application
+- Image-based CI/CD friendly workflow
+- AWS EC2 guidance for production
 
-🧑‍💼 Project Purpose
+---
 
-This project was built to demonstrate real-world problem-solving using Spring Boot and RESTful APIs.
-It showcases authentication, database integration, and clean backend architecture, making it an ideal example of enterprise-grade application design.
+## 📂 Project Structure
+
+```text
+src
+├── main
+│   ├── java/com/resolvex
+│   │   ├── controller
+│   │   ├── service
+│   │   ├── repository
+│   │   ├── entity
+│   │   ├── security
+│   │   ├── config
+│   │   └── exception
+│   └── resources/application.properties
+├── test/java/com/resolvex/UserServiceTest
+```
+
+---
+
+## ⚡ Performance Characteristics
+
+| Parameter             | Expected Behavior |
+|-----------------------|------------------|
+| Login Latency         | Low              |
+| Ticket Creation Speed | Fast             |
+| Ticket Retrieval      | Optimized        |
+| Filtering Performance | Moderate         |
+| Workflow Processing   | Efficient        |
+
+---
+
+## 📈 Scalability
+
+- Layered design for maintainability and modular upgrades
+- Suitable for small and mid-sized organizations, moderate ticket volumes
+
+---
+
+## 🧠 Key Engineering Decisions
+
+- Layered architecture for clarity
+- MySQL for structured data
+- Spring Security for auth
+- JPA/Hibernate for ORM
+- Docker for portability
+
+---
+
+## ⚠️ Challenges Faced
+
+- Handling workflow transitions & bidirectional mapping
+- Secure password/auth setup
+- Workflow-driven and not just CRUD
+- Deployment dockerization
+
+---
+
+## 📈 Future Enhancements
+
+- JWT Authentication
+- Role-Based Access Control (RBAC)
+- SLA, Escalation & Ticket Prioritization
+- Email Notifications & Analytics Dashboard
+- OpenAPI Documentation (Swagger)
+- Microservices Migration
+- Enhanced Monitoring & Logging
+
+---
+
+## ▶️ How To Run Locally
+
+1. **Clone Repository:**
+    ```bash
+    git clone https://github.com/your-username/helpdesk-support-system.git
+    cd helpdesk-support-system
+    ```
+
+2. **Configure Database:**
+    Edit `src/main/resources/application.properties` with your MySQL details:
+    ```properties
+    spring.datasource.url=jdbc:mysql://localhost:3306/support_db
+    spring.datasource.username=root
+    spring.datasource.password=yourpassword
+    spring.jpa.hibernate.ddl-auto=update
+    ```
+
+3. **Build Project:**
+    ```bash
+    mvn clean install
+    ```
+
+4. **Run Application:**
+    ```bash
+    mvn spring-boot:run
+    ```
+
+5. **Open in Browser:**  
+    [http://localhost:8080](http://localhost:8080)
+
+---
+
+## 💡 Key Engineering Concepts Demonstrated
+
+- Layered Architecture & Service-Based Design
+- Workflow-Based Ticket Lifecycle Management
+- Secure Authentication
+- JPA/Hibernate ORM
+- Filtering & Pagination Support
+- Docker & Cloud Deployment Awareness
+- Unit Testing for Service Layer
+
+---
+
+## 🏁 Conclusion
+
+**ResolveX** showcases workflow management for helpdesk operations, underpinned by clean Spring Boot architecture, strong security, and real-world backend engineering.  
+Ideal for organizations seeking maintainable, secure, and extensible support ticketing solutions.
+
+---
+
+## 👨‍💻 Author
+
+Built as a backend engineering portfolio project focused on:
+- Workflow-driven logic
+- Spring Boot development
+- Secure REST APIs
+- Robust relational modeling
+- Production-ready deployments
+
+---
